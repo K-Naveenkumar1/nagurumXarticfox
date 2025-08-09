@@ -835,7 +835,7 @@
                 n = document.getElementById("shopify-subscription-policy-button");
             t && n && (t.classList.remove("hidden"), t.removeAttribute("aria-hidden"), n.addEventListener("click", e))
         }
-        window.Shopify ? .PaymentButton && (window.Shopify.PaymentButton.hideBuyerConsent = portableWalletsHideBuyerConsent, window.Shopify.PaymentButton.showBuyerConsent = portableWalletsShowBuyerConsent);
+        window.Shopify ? window.Shopify.PaymentButton && (window.Shopify.PaymentButton.hideBuyerConsent = portableWalletsHideBuyerConsent, window.Shopify.PaymentButton.showBuyerConsent = portableWalletsShowBuyerConsent) : null;
     </script>
     <script data-source-attribution="shopify.dynamic_checkout.cart.bootstrap">
         document.addEventListener("DOMContentLoaded", (function() {
@@ -1058,40 +1058,6 @@
             document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
         }
 
-        function trackLastVisitedProductAndCollection() {
-            if (BspdCurrentProduct) {
-                // check cookies for last visited product details (product id)
-                const lastVisitedProduct = bspdGetBarCookie(BSPD_LAST_VISITED_PRODUCT);
-                if (lastVisitedProduct) {
-                    BspdLastVisitedProduct = lastVisitedProduct;
-
-                    if (BspdCurrentProduct ? .id !== BspdLastVisitedProduct) {
-                        // set the cookie again
-                        bspdSetBarCookie(BSPD_LAST_VISITED_PRODUCT, BspdCurrentProduct ? .id, 300);
-                    }
-                } else if (BspdCurrentProduct && BspdCurrentProduct ? .id) {
-                    // set the cookie
-                    bspdSetBarCookie(BSPD_LAST_VISITED_PRODUCT, BspdCurrentProduct ? .id, 300);
-                }
-            }
-
-            if (BspdCurrentCollection) {
-                // check cookies for last visited collection details (collection id)
-                const lastVisitedCollection = bspdGetBarCookie(BSPD_LAST_VISITED_COLLECTION);
-                if (lastVisitedCollection) {
-                    BspdLastVisitedCollection = lastVisitedCollection;
-
-                    if (BspdCurrentCollection ? .id !== BspdLastVisitedCollection) {
-                        // set the cookie again
-                        bspdSetBarCookie(BSPD_LAST_VISITED_COLLECTION, BspdCurrentCollection ? .id, 300);
-                    }
-                } else if (BspdCurrentCollection && BspdCurrentCollection ? .id) {
-                    // set the cookie
-                    bspdSetBarCookie(BSPD_LAST_VISITED_COLLECTION, BspdCurrentCollection ? .id, 300);
-                }
-            }
-        }
-
         /**
          * method that stores a entry whenever the user visits any of the page
          * and increments the count by 1
@@ -1150,9 +1116,6 @@
             function syncCart() {
                 const oldCart = JSON.parse(localStorage.getItem(BSPD_CART_DATA_LOCAL_KEY) || '{}');
 
-                if (BspdCurrentCart ? .item_count !== oldCart ? .item_count) {
-                    localStorage.setItem(BSPD_CART_DATA_LOCAL_KEY, JSON.stringify(BspdCurrentCart));
-                }
             }
             syncCart()
 
@@ -1163,9 +1126,6 @@
                         .then((newCart) => {
                             const oldCart = JSON.parse(localStorage.getItem(BSPD_CART_DATA_LOCAL_KEY) || '{}');
 
-                            if (newCart ? .item_count !== oldCart ? .item_count) {
-                                localStorage.setItem(BSPD_CART_DATA_LOCAL_KEY, JSON.stringify(newCart));
-                            }
                         }).catch(() => {})
                 } catch (error) {}
             }
@@ -1390,19 +1350,6 @@
                 const userAgent = navigator.userAgent;
 
                 let lineItems = [];
-
-                if (shopDomainStripped.includes('.neonattack.com') && cartData && cartData ? .items) {
-                    lineItems = cartData.items ? .map((item) => {
-                        return {
-                            product_id: item.product_id,
-                            variant_id: item.id,
-                            price: item.price,
-                            quantity: item.quantity,
-                            sku: item.sku,
-                            title: item.title,
-                            vendor: item.vendor,
-                        };
-                    });
                 }
 
                 var postData = {
@@ -1417,8 +1364,6 @@
                     ref: refb,
                     ssid: getcookieGlobalAnal('ssid'),
                     contactId: Number.parseInt(getcookieGlobalAnal('contactIdBitespeed')),
-                    platformMobile: /iPad|iPhone|iPod/.test(userAgent) ? 'ios' : /Android/.test(userAgent) ? 'android' : '',
-                    platformDesktop: /Mac/.test(userAgent) ? 'mac' : /Windows/.test(userAgent) ? 'windows' : '',
                 };
 
                 let isMultiChannel = true;
@@ -1445,7 +1390,7 @@
                     console.log('AXIOS ERROR: ', err);
                 });
             }
-        }
+
 
         let intervalId = setInterval(() => {
             lookForCart();
@@ -1744,13 +1689,6 @@
         var shop_domain = "";
         var dont_show_notify_me_strict = false;
 
-        var variants = product ? .variants
-        var productCollections = product ? .collections
-
-        // variables to build custom logic for different brands
-        var globalFormEle = null;
-        var globalPrimaryBtn = null;
-
         var variantParam = getParameterByName("variant");
         if (variantParam && !isNaN(variantParam)) {
             // getting variant param from the url and if it is a proper number set the current_variant as that
@@ -1774,7 +1712,7 @@
             //     product = productFetch;
             //     variants = productFetch.variants;
             //   }
-        } else if (!current_variant && Array.isArray(product ? .variants) && product ? .variants.length > 0) {
+        } else {
             // change the current_variant to the first variant in the url
 
             // window.history.replaceState(
@@ -2538,8 +2476,7 @@
             "to": 30,
             "productHandles": []
         };
-        if (FoxKitPlugins.StockCountdown) FoxKitPlugins.StockCountdown.locales = !FoxKitSettings.primaryLocale && FoxKitPlugins.StockCountdown ? .locales ? .[Shopify.locale];
-
+        
 
 
 
@@ -2555,7 +2492,7 @@
             "show_on_drawer": true,
             "productHandles": []
         };
-        if (FoxKitPlugins.CartCountdown) FoxKitPlugins.CartCountdown.locales = !FoxKitSettings.primaryLocale && FoxKitPlugins.CartCountdown ? .locales ? .[Shopify.locale]
+        
     </script>
 
     <link href="//cdn.shopify.com/extensions/edebc220-12c8-4505-bbfd-fa74f994c79b/foxkit-sales-boost-410/assets/main.css" rel="stylesheet" type="text/css" media="all" />
@@ -2584,8 +2521,7 @@
             "shop": "arctic-fox-india.myshopify.com",
             "productHandles": []
         };
-        if (FoxKitPlugins.PreOrderSettings) FoxKitPlugins.PreOrderSettings.locales = !FoxKitSettings.primaryLocale && FoxKitPlugins.PreOrderSettings ? .locales ? .[Shopify.locale]
-    </script>
+            </script>
 
     <script src='https://cdn.shopify.com/extensions/edebc220-12c8-4505-bbfd-fa74f994c79b/foxkit-sales-boost-410/assets/preorder-badge.js' fetchpriority='low' defer='defer'></script>
 
@@ -9248,171 +9184,6 @@
                     --items: 3;
                 }
             </style>
-            <section id="m-section--template--15381734293579__04c23875-c382-46ad-a073-4e26b496965c" class="m-section m-icon-box-section m-gradient m-color-default" data-section-type="icon-box" data-section-id="template--15381734293579__04c23875-c382-46ad-a073-4e26b496965c">
-                <div class="container-fluid m-section-my m-section-py">
-
-
-
-
-
-
-                    <m-icon-box data-enable-slider="true" data-show-pagination="false" data-show-navigation="false" data-items="3" class="m-swiper-overflow m:block">
-                        <div class="m-icon-box-section__wrapper m-mixed-layout">
-                            <div class="m-mixed-layout__wrapper swiper-container">
-                                <div class="m-mixed-layout__inner m:grid m:grid md:m:grid-2-cols lg:m:grid-3-cols swiper-wrapper">
-
-
-                                    <div class="m:column swiper-slide" data-slide="0">
-                                        <div class="m-icon-box m-icon-box--vertical   m-gradient m-color-default m-scroll-trigger animate--fade-in-up" data-cascade style="--animation-order: 1;">
-                                            <div class="m-icon-box__inner m:flex-col m:items-center">
-
-                                                <div class="m-icon-box__icon m-hover-box m-hover-box--scale-up m:items-center" style="width: 70px;">
-                                                    <div class="m-hover-box__wrapper m:w-full">
-
-                                                        <responsive-image class="m-image m:w-full" style="--aspect-ratio: 1.0;">
-
-                                                            <img srcset="//arcticfox.com/cdn/shop/files/Shipping_Icon_1cd30883-4866-49ef-877c-4dd7b755ba44.png?v=1710505649&width=165 165w,//arcticfox.com/cdn/shop/files/Shipping_Icon_1cd30883-4866-49ef-877c-4dd7b755ba44.png?v=1710505649 301w" src="//arcticfox.com/cdn/shop/files/Shipping_Icon_1cd30883-4866-49ef-877c-4dd7b755ba44.png?v=1710505649&width=360"
-                                                                sizes="(min-width: 1100px) 242px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" alt="" loading="lazy" class="m:w-full"
-                                                                width="301" height="301">
-
-                                                            <noscript>
-    <img class="m:w-full" loading="lazy" width="" height="" src="//arcticfox.com/cdn/shop/files/Shipping_Icon_1cd30883-4866-49ef-877c-4dd7b755ba44.png?crop=center&height=2048&v=1710505649&width=2048" alt="">
-  </noscript>
-                                                        </responsive-image>
-
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="m-icon-box__content m:flex-1 m:text-center">
-
-                                                    <h3 class="m-icon-box__heading h4">FREE SHIPPING</h3>
-
-
-                                                    <div class="m-icon-box__description rte m:text-color-subtext">
-                                                        <p>Free & Fast Shipping</p>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="m:column swiper-slide" data-slide="1">
-                                        <div class="m-icon-box m-icon-box--vertical   m-gradient m-color-default m-scroll-trigger animate--fade-in-up" data-cascade style="--animation-order: 2;">
-                                            <div class="m-icon-box__inner m:flex-col m:items-center">
-
-                                                <div class="m-icon-box__icon m-hover-box m-hover-box--scale-up m:items-center" style="width: 70px;">
-                                                    <div class="m-hover-box__wrapper m:w-full">
-
-                                                        <responsive-image class="m-image m:w-full" style="--aspect-ratio: 1.0;">
-
-                                                            <img srcset="//arcticfox.com/cdn/shop/files/Payment_Icon_769cd617-0947-49ed-9cef-9f97bb251eb6.png?v=1710505656&width=165 165w,//arcticfox.com/cdn/shop/files/Payment_Icon_769cd617-0947-49ed-9cef-9f97bb251eb6.png?v=1710505656 301w" src="//arcticfox.com/cdn/shop/files/Payment_Icon_769cd617-0947-49ed-9cef-9f97bb251eb6.png?v=1710505656&width=360"
-                                                                sizes="(min-width: 1100px) 242px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" alt="" loading="lazy" class="m:w-full"
-                                                                width="301" height="301">
-
-                                                            <noscript>
-    <img class="m:w-full" loading="lazy" width="" height="" src="//arcticfox.com/cdn/shop/files/Payment_Icon_769cd617-0947-49ed-9cef-9f97bb251eb6.png?crop=center&height=2048&v=1710505656&width=2048" alt="">
-  </noscript>
-                                                        </responsive-image>
-
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="m-icon-box__content m:flex-1 m:text-center">
-
-                                                    <h3 class="m-icon-box__heading h4">SECURE CHECKOUT</h3>
-
-
-                                                    <div class="m-icon-box__description rte m:text-color-subtext">
-                                                        <p>Easy Checkout</p>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="m:column swiper-slide" data-slide="2">
-                                        <div class="m-icon-box m-icon-box--vertical   m-gradient m-color-default m-scroll-trigger animate--fade-in-up" data-cascade style="--animation-order: 3;">
-                                            <div class="m-icon-box__inner m:flex-col m:items-center">
-
-                                                <div class="m-icon-box__icon m-hover-box m-hover-box--scale-up m:items-center" style="width: 70px;">
-                                                    <div class="m-hover-box__wrapper m:w-full">
-
-                                                        <responsive-image class="m-image m:w-full" style="--aspect-ratio: 1.0;">
-
-                                                            <img srcset="//arcticfox.com/cdn/shop/files/Brand_Warranty_Icon_fabf0876-4b4e-431b-8753-583fe4703189.png?v=1710505661&width=165 165w,//arcticfox.com/cdn/shop/files/Brand_Warranty_Icon_fabf0876-4b4e-431b-8753-583fe4703189.png?v=1710505661 301w" src="//arcticfox.com/cdn/shop/files/Brand_Warranty_Icon_fabf0876-4b4e-431b-8753-583fe4703189.png?v=1710505661&width=360"
-                                                                sizes="(min-width: 1100px) 242px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)" alt="" loading="lazy" class="m:w-full"
-                                                                width="301" height="301">
-
-                                                            <noscript>
-    <img class="m:w-full" loading="lazy" width="" height="" src="//arcticfox.com/cdn/shop/files/Brand_Warranty_Icon_fabf0876-4b4e-431b-8753-583fe4703189.png?crop=center&height=2048&v=1710505661&width=2048" alt="">
-  </noscript>
-                                                        </responsive-image>
-
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="m-icon-box__content m:flex-1 m:text-center">
-
-                                                    <h3 class="m-icon-box__heading h4">BRAND WARRANTY</h3>
-
-
-                                                    <div class="m-icon-box__description rte m:text-color-subtext">
-                                                        <p>Up to 1 Year of Warranty</p>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="m-slider-controls m-slider-controls--bottom-center m-slider-controls--absolute">
-                                <div class="m-slider-controls__wrapper">
-
-
-
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </m-icon-box>
-                </div>
-            </section>
-
-
-        </div>
-        <div id="shopify-section-template--15381734293579__1703676015c1d091bd" class="shopify-section">
-
-            <section id="m-app-section-template--15381734293579__1703676015c1d091bd" class="m-section m-app-section " style="background-color: ;--section-padding-top: 50px; --section-padding-bottom: 50px;">
-                <div class="container m-section-my">
-
-
-
-
-
-
-                    <div class="m-app-section__content">
-
-                    </div>
-                </div>
-            </section>
-
 
         </div>
     </main>
