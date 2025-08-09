@@ -629,236 +629,6 @@
         };
     </script>
     <script>
-        window.ShopifyPaypalV4VisibilityTracking = true;
-    </script>
-    <script id="captcha-bootstrap">
-        ! function() {
-            'use strict';
-            const t = 'contact',
-                e = 'account',
-                n = 'new_comment',
-                o = [
-                    [t, t],
-                    ['blogs', n],
-                    ['comments', n],
-                    [t, 'customer']
-                ],
-                c = [
-                    [e, 'customer_login'],
-                    [e, 'guest_login'],
-                    [e, 'recover_customer_password'],
-                    [e, 'create_customer']
-                ],
-                r = t => t.map((([t, e]) => `form[action*='/${t}']:not([data-nocaptcha='true']) input[name='form_type'][value='${e}']`)).join(','),
-                a = t => () => t ? [...document.querySelectorAll(t)].map((t => t.form)) : [];
-
-            function s() {
-                const t = [...o],
-                    e = r(t);
-                return a(e)
-            }
-            const i = 'password',
-                u = 'form_key',
-                d = ['recaptcha-v3-token', 'g-recaptcha-response', 'h-captcha-response', i],
-                f = () => {
-                    try {
-                        return window.sessionStorage
-                    } catch {
-                        return
-                    }
-                },
-                m = '__shopify_v',
-                _ = t => t.elements[u];
-
-            function p(t, e, n = !1) {
-                try {
-                    const o = window.sessionStorage,
-                        c = JSON.parse(o.getItem(e)),
-                        {
-                            data: r
-                        } = function(t) {
-                            const {
-                                data: e,
-                                action: n
-                            } = t;
-                            return t[m] || n ? {
-                                data: e,
-                                action: n
-                            } : {
-                                data: t,
-                                action: n
-                            }
-                        }(c);
-                    for (const [e, n] of Object.entries(r)) t.elements[e] && (t.elements[e].value = n);
-                    n && o.removeItem(e)
-                } catch (o) {
-                    console.error('form repopulation failed', {
-                        error: o
-                    })
-                }
-            }
-            const l = 'form_type',
-                E = 'cptcha';
-
-            function T(t) {
-                t.dataset[E] = !0
-            }
-            const w = window,
-                h = w.document,
-                L = 'Shopify',
-                v = 'ce_forms',
-                y = 'captcha';
-            let A = !1;
-            ((t, e) => {
-                const n = (g = 'f06e6c50-85a8-45c8-87d0-21a2b65856fe', I = 'https://cdn.shopify.com/shopifycloud/storefront-forms-hcaptcha/ce_storefront_forms_captcha_hcaptcha.v1.5.2.iife.js', D = {
-                    infoText: 'Protected by hCaptcha',
-                    privacyText: 'Privacy',
-                    termsText: 'Terms'
-                }, (t, e, n) => {
-                    const o = w[L][v],
-                        c = o.bindForm;
-                    if (c) return c(t, g, e, D).then(n);
-                    var r;
-                    o.q.push([
-                        [t, g, e, D], n
-                    ]), r = I, A || (h.body.append(Object.assign(h.createElement('script'), {
-                        id: 'captcha-provider',
-                        async: !0,
-                        src: r
-                    })), A = !0)
-                });
-                var g, I, D;
-                w[L] = w[L] || {}, w[L][v] = w[L][v] || {}, w[L][v].q = [], w[L][y] = w[L][y] || {}, w[L][y].protect = function(t, e) {
-                        n(t, void 0, e), T(t)
-                    }, Object.freeze(w[L][y]),
-                    function(t, e, n, w, h, L) {
-                        const [v, y, A, g] = function(t, e, n) {
-                            const i = e ? o : [],
-                                u = t ? c : [],
-                                d = [...i, ...u],
-                                f = r(d),
-                                m = r(i),
-                                _ = r(d.filter((([t, e]) => n.includes(e))));
-                            return [a(f), a(m), a(_), s()]
-                        }(w, h, L), I = t => {
-                            const e = t.target;
-                            return e instanceof HTMLFormElement ? e : e && e.form
-                        }, D = t => v().includes(t);
-                        t.addEventListener('submit', (t => {
-                            const e = I(t);
-                            if (!e) return;
-                            const n = D(e) && !e.dataset.hcaptchaBound && !e.dataset.recaptchaBound,
-                                o = _(e),
-                                c = g().includes(e) && (!o || !o.value);
-                            (n || c) && t.preventDefault(), c && !n && (function(t) {
-                                try {
-                                    if (!f()) return;
-                                    ! function(t) {
-                                        const e = f();
-                                        if (!e) return;
-                                        const n = _(t);
-                                        if (!n) return;
-                                        const o = n.value;
-                                        o && e.removeItem(o)
-                                    }(t);
-                                    const e = Array.from(Array(32), (() => Math.random().toString(36)[2])).join('');
-                                    ! function(t, e) {
-                                        _(t) || t.append(Object.assign(document.createElement('input'), {
-                                            type: 'hidden',
-                                            name: u
-                                        })), t.elements[u].value = e
-                                    }(t, e),
-                                    function(t, e) {
-                                        const n = f();
-                                        if (!n) return;
-                                        const o = [...t.querySelectorAll(`input[type='${i}']`)].map((({
-                                                name: t
-                                            }) => t)),
-                                            c = [...d, ...o],
-                                            r = {};
-                                        for (const [a, s] of new FormData(t).entries()) c.includes(a) || (r[a] = s);
-                                        n.setItem(e, JSON.stringify({
-                                            [m]: 1,
-                                            action: t.action,
-                                            data: r
-                                        }))
-                                    }(t, e)
-                                } catch (e) {
-                                    console.error('failed to persist form', e)
-                                }
-                            }(e), e.submit())
-                        }));
-                        const S = (t, e) => {
-                            t && !t.dataset[E] && (n(t, e.some((e => e === t))), T(t))
-                        };
-                        for (const o of ['focusin', 'change']) t.addEventListener(o, (t => {
-                            const e = I(t);
-                            D(e) && S(e, y())
-                        }));
-                        const B = e.get('form_key'),
-                            M = e.get(l),
-                            P = B && M;
-                        t.addEventListener('DOMContentLoaded', (() => {
-                            const t = y();
-                            if (P)
-                                for (const e of t) e.elements[l].value === M && p(e, B);
-                            [...new Set([...A(), ...v().filter((t => 'true' === t.dataset.shopifyCaptcha))])].forEach((e => S(e, t)))
-                        }))
-                    }(h, new URLSearchParams(w.location.search), n, t, e, ['guest_login'])
-            })(!0, !0)
-        }();
-    </script>
-    <script integrity="sha256-52AcMU7V7pcBOXWImdc/TAGTFKeNjmkeM1Pvks/DTgc=" data-source-attribution="shopify.loadfeatures" defer="defer" src="//arcticfox.com/cdn/shopifycloud/storefront/assets/storefront/load_feature-81c60534.js" crossorigin="anonymous"></script>
-    <script>
-        fetch('/sf_private_access_tokens' + location.search).catch(() => {});
-    </script>
-    <script data-source-attribution="shopify.dynamic_checkout.dynamic.init">
-        var Shopify = Shopify || {};
-        Shopify.PaymentButton = Shopify.PaymentButton || {
-            isStorefrontPortableWallets: !0,
-            init: function() {
-                window.Shopify.PaymentButton.init = function() {};
-                var t = document.createElement("script");
-                t.src = "https://arcticfox.com/cdn/shopifycloud/portable-wallets/latest/portable-wallets.en.js", t.type = "module", document.head.appendChild(t)
-            }
-        };
-    </script>
-    <script data-source-attribution="shopify.dynamic_checkout.buyer_consent">
-        function portableWalletsHideBuyerConsent(e) {
-            var t = document.getElementById("shopify-buyer-consent"),
-                n = document.getElementById("shopify-subscription-policy-button");
-            t && n && (t.classList.add("hidden"), t.setAttribute("aria-hidden", "true"), n.removeEventListener("click", e))
-        }
-
-        function portableWalletsShowBuyerConsent(e) {
-            var t = document.getElementById("shopify-buyer-consent"),
-                n = document.getElementById("shopify-subscription-policy-button");
-            t && n && (t.classList.remove("hidden"), t.removeAttribute("aria-hidden"), n.addEventListener("click", e))
-        }
-        window.Shopify ? window.Shopify.PaymentButton && (window.Shopify.PaymentButton.hideBuyerConsent = portableWalletsHideBuyerConsent, window.Shopify.PaymentButton.showBuyerConsent = portableWalletsShowBuyerConsent) : null;
-    </script>
-    <script data-source-attribution="shopify.dynamic_checkout.cart.bootstrap">
-        document.addEventListener("DOMContentLoaded", (function() {
-            function t() {
-                return document.querySelector("shopify-accelerated-checkout-cart, shopify-accelerated-checkout")
-            }
-            if (t()) Shopify.PaymentButton.init();
-            else {
-                new MutationObserver((function(e, n) {
-                    t() && (Shopify.PaymentButton.init(), n.disconnect())
-                })).observe(document.body, {
-                    childList: !0,
-                    subtree: !0
-                })
-            }
-        }));
-    </script>
-
-    <script>
-        window.performance && window.performance.mark && window.performance.mark('shopify.content_for_header.end');
-    </script>
-
-    <script>
         document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
         if (Shopify.designMode) {
             document.documentElement.classList.add('shopify-design-mode');
@@ -1006,671 +776,6 @@
         }
 
         __setSwatchesOptions();
-    </script>
-
-
-    <!-- BEGIN app block: shopify://apps/bitespeed-whatsapp-marketing/blocks/app-embed/9efdb9ca-2d01-4a12-b1ac-02679fe0f6fc -->
-    <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script async src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
-
-
-
-    <!-- BEGIN app snippet: optin-triggers-middleware -->
-    <script type="text/javascript" name="BSPD-SHOPIFY-VARS">
-        var BspdCurrentCart = {
-            "note": null,
-            "attributes": {},
-            "original_total_price": 0,
-            "total_price": 0,
-            "total_discount": 0,
-            "total_weight": 0.0,
-            "item_count": 0,
-            "items": [],
-            "requires_shipping": false,
-            "currency": "INR",
-            "items_subtotal_price": 0,
-            "cart_level_discount_applications": [],
-            "checkout_charge_amount": 0
-        }
-        var BspdCurrentProduct = null;
-        var BspdCurrentCollection = null
-
-        var BSPD_CART_DATA_LOCAL_KEY = 'bspdCartData';
-        var BSPD_LAST_VISIT_COUNT_LOCAL_KEY = 'bspdLastUserVisitCount';
-        var BSPD_LAST_VISITED_PRODUCT = 'bspdLastVisitedProduct';
-        var BSPD_LAST_VISITED_COLLECTION = 'bspdLastVisitedCollection';
-        var BspdLastVisitedProduct = null,
-            BspdLastVisitedCollection = null;
-
-        function bspdGetBarCookie(name) {
-            const value = '; ' + document.cookie;
-            const parts = value.split('; ' + name + '=');
-            if (parts.length === 2) {
-                return parts.pop().split(';').shift();
-            }
-            return null;
-        }
-
-        function bspdSetBarCookie(name, value, days) {
-            const expires = new Date();
-
-            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-            document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
-        }
-
-        /**
-         * method that stores a entry whenever the user visits any of the page
-         * and increments the count by 1
-         * the data schema looks like
-         * {
-         *    [DATE]: {
-         *      date: string
-         *      route: {
-         *       [ROUTE]: number
-         *      }
-         *      count: number
-         *    }
-         * }
-         *
-         * this will be a json object whose key will be the date and value will be the object
-         * and will be stored in local-storage
-         */
-        function trackLastVisitedCount() {
-            const date = new Date();
-            const dateString = date.toISOString().split('T')[0];
-
-            let lastVisitedCount = JSON.parse(localStorage.getItem(BSPD_LAST_VISIT_COUNT_LOCAL_KEY)) || {};
-
-            if (lastVisitedCount[dateString]) {
-                lastVisitedCount[dateString].count += 1;
-
-                // also update route
-                const route = window.location.pathname;
-
-                if (lastVisitedCount[dateString].route[route]) {
-                    lastVisitedCount[dateString].route[route] += 1;
-                } else {
-                    lastVisitedCount[dateString].route[route] = 1;
-                }
-            } else {
-                const route = window.location.pathname;
-
-                lastVisitedCount[dateString] = {
-                    date: dateString,
-                    route: {
-                        [route]: 1,
-                    },
-                    count: 1,
-                };
-            }
-
-            localStorage.setItem(BSPD_LAST_VISIT_COUNT_LOCAL_KEY, JSON.stringify(lastVisitedCount));
-        }
-
-        /**
-         * this method keeps a track of the current cart activity
-         * if there are any changes by the user, this will track those changes
-         * and making changes on storing it safely
-         */
-        const storeCartData = () => {
-            function syncCart() {
-                const oldCart = JSON.parse(localStorage.getItem(BSPD_CART_DATA_LOCAL_KEY) || '{}');
-
-            }
-            syncCart()
-
-            async function emitCartChanges() {
-                try {
-                    const response = await fetch('/cart.js')
-                        .then((res) => res.json())
-                        .then((newCart) => {
-                            const oldCart = JSON.parse(localStorage.getItem(BSPD_CART_DATA_LOCAL_KEY) || '{}');
-
-                        }).catch(() => {})
-                } catch (error) {}
-            }
-
-            // track changes in cart.js, on change store the cart data
-            const cartObserver = new PerformanceObserver((list) => {
-                list.getEntries().forEach((entry) => {
-                    const isValidRequestType = ['xmlhttprequest', 'fetch'].includes(entry.initiatorType);
-                    const isCartChangeRequest = /\/cart\//.test(entry.name);
-
-                    if (isValidRequestType && isCartChangeRequest) {
-                        emitCartChanges();
-                    }
-                });
-            });
-            cartObserver.observe({
-                entryTypes: ['resource']
-            });
-        };
-
-        function execute() {
-            trackLastVisitedProductAndCollection();
-            trackLastVisitedCount();
-
-            storeCartData();
-        }
-        execute();
-    </script>
-    <!-- END app snippet -->
-
-
-
-
-    <script defer src="https://cdn.shopify.com/extensions/0265b3a4-2f19-4c76-a7be-85a38f05612c/bitespeed-whatsapp-marketing-792/assets/bitespeed-popups.js" />
-
-
-
-    <!-- BEGIN app snippet: bitespeed-analytics -->
-    <script name="bitespeed-variable" type="text/javascript">
-        const dummyBitespeedVar = 'dummyBitespeedVar';
-    </script>
-
-    <script name="bitespeed-analytics" type="text/javascript">
-        const getcookieGlobalAnal = (cookie) => {
-            let cookieJson = {};
-            document.cookie.split(';').forEach(function(el) {
-                let [k, v] = el.split('=');
-                cookieJson[k.trim()] = v;
-            });
-            return cookieJson[cookie];
-        };
-
-        const setCookieGlobalAnal = (cookie, value, days, hours) => {
-            let expires = '';
-            if (days) {
-                let date = new Date();
-                date.setTime(date.getTime() + days * hours * 60 * 60 * 1000);
-                expires = '; expires=' + date.toUTCString();
-            }
-            document.cookie = cookie + '=' + (value || '') + expires + '; path=/';
-        };
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const getIsMultichannelAnal = async () => {
-                try {
-                    // TODO_sobhan
-                    // var indexOfwww = location.hostname.indexOf('www');
-                    // var shopDomainStripped = indexOfwww === -1 ? '.' + location.hostname : location.hostname.substr(indexOfwww + 3);
-                    // var globalShopUrl = indexOfwww === -1 ? location.hostname : location.hostname.substr(indexOfwww + 4);
-                    // let res = await fetch(`https://app.bitespeed.co/database/popups/isMultichannel?shopDomain=${globalShopUrl}`, {
-                    //   method: 'GET',
-                    //   headers: {
-                    //     'Access-Control-Allow-Origin': '*',
-                    //   },
-                    // });
-                    // if (!res.ok) {
-                    //   throw new Error(`HTTP error! status: ${res.status}`);
-                    // }
-                    // let data = await res.json();
-                    // console.log(data);
-                    // return data.isMultichannel || true;
-                    return true;
-                } catch (error) {
-                    console.log(error);
-                }
-            };
-
-            async function checkMultichannel() {
-                console.log('in checkMultichannel');
-                const isMultichannel = await getIsMultichannelAnal();
-                if (isMultichannel) {
-                    setCookieGlobalAnal('isMultiChannel', isMultichannel, 1, 1);
-                } else {
-                    setCookieGlobalAnal('isMultiChannel', isMultichannel, 1, 1);
-                }
-                console.log('Setting is multichannel from anal file to ', isMultichannel);
-            }
-
-            (async function() {
-                let refb = String(getcookieGlobalAnal('refb'));
-                let ssid = String(getcookieGlobalAnal('ssid'));
-                if (refb === null || refb === '' || refb === undefined || refb === 'undefined') {
-                    var refbnew = createRef();
-                }
-                if (ssid === null || ssid === '' || ssid === undefined || ssid === 'undefined') {
-                    var ssidnew = await createSsid();
-                }
-                if (!getcookieGlobalAnal('isMultiChannel')) {
-                    console.log('isMultichannel not found in local making BE call Anal file');
-                    await checkMultichannel();
-                }
-            })();
-        });
-
-        const DBURL = 'https://app.bitespeed.co/database';
-        var indexOfwww = location.hostname.indexOf('www');
-        var shopDomainStripped = indexOfwww === -1 ? '.' + location.hostname : location.hostname.substr(indexOfwww + 3);
-
-        function getCookie(name) {
-            var value = '; ' + document.cookie;
-            var parts = value.split('; ' + name + '=');
-            if (parts.length == 2) return parts.pop().split(';').shift();
-        }
-
-        function createRef() {
-            let uuid = create_UUID();
-            document.cookie =
-                'refb=' +
-                uuid +
-                ';expires=' +
-                new Date(new Date().setFullYear(new Date().getFullYear() + 10)) +
-                ';domain=' +
-                shopDomainStripped +
-                '; path=/';
-            return uuid;
-        }
-
-        async function createSsid() {
-            let uuid = create_UUID();
-            document.cookie = 'ssid=' + uuid + ';domain=' + shopDomainStripped + '; path=/';
-            return uuid;
-        }
-
-        function create_UUID() {
-            var dt = new Date().getTime();
-            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = (dt + Math.random() * 16) % 16 | 0;
-                dt = Math.floor(dt / 16);
-                return (c == 'x' ? r : (r & 0x3) | 0x8).toString(16);
-            });
-            return uuid;
-        }
-
-        function lookForCart() {
-            let contactIdBitespeed = getcookieGlobalAnal('contactIdBitespeed');
-
-            if (
-                contactIdBitespeed === null ||
-                contactIdBitespeed === '' ||
-                contactIdBitespeed === undefined ||
-                contactIdBitespeed === 'undefined'
-            )
-                return;
-
-            var myCookie = getcookieGlobalAnal('cart');
-
-            const currentTimestamp = new Date().getTime();
-            const recentlyCartCreatedAt = getcookieGlobalAnal('bspd_cart_created_at');
-
-            let lastTrackedCart = getcookieGlobalAnal('last_tracked_cart_event');
-            let lastTrackedCartLineItemsCnt = getcookieGlobalAnal('last_tracked_cart_line_items_cnt');
-
-            if (myCookie && shopDomainStripped.includes('.neonattack.com')) {
-                clearInterval(intervalId);
-
-                if (!recentlyCartCreatedAt) {
-                    document.cookie = `bspd_cart_created_at=${currentTimestamp}` + ';domain=' + shopDomainStripped + '; path=/';
-                }
-
-                const cartData = cart; // a global variable, as of now only on neonattack.com (hardikecommerce.myshopify.com)
-
-                if (myCookie !== lastTrackedCart || Number(lastTrackedCartLineItemsCnt) !== cartData.item_count) {
-                    document.cookie = `${myCookie}=true` + ';domain=' + shopDomainStripped + '; path=/';
-
-                    document.cookie = `last_tracked_cart_event=${myCookie}` + ';domain=' + shopDomainStripped + '; path=/';
-                    document.cookie =
-                        `last_tracked_cart_line_items_cnt=${cartData.item_count}` + ';domain=' + shopDomainStripped + '; path=/';
-
-                    sendToWebhook(myCookie, cartData);
-                }
-            } else if (myCookie) {
-                clearInterval(intervalId);
-
-                if (!recentlyCartCreatedAt) {
-                    document.cookie = `bspd_cart_created_at=${currentTimestamp}` + ';domain=' + shopDomainStripped + '; path=/';
-                }
-
-                if (!getcookieGlobalAnal(`${myCookie}`)) {
-                    document.cookie = `${myCookie}=true` + ';domain=' + shopDomainStripped + '; path=/';
-
-                    sendToWebhook(myCookie);
-                }
-            } else if (!myCookie && recentlyCartCreatedAt) {
-                // reseting the cart created at cookie if it exists
-                document.cookie =
-                    `bspd_last_cart_created_at=${recentlyCartCreatedAt}` + ';domain=' + shopDomainStripped + '; path=/';
-                document.cookie = `bspd_cart_created_at=;domain=${shopDomainStripped}; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-            }
-        }
-
-        function sendToWebhook(cartToken, cartData = {}) {
-            let axiosConfig = {
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': '*',
-                },
-            };
-
-            let refb = getcookieGlobalAnal('refb');
-
-            if (refb === null || refb === '' || refb === undefined || refb === 'undefined') {} else {
-                const userAgent = navigator.userAgent;
-
-                let lineItems = [];
-                }
-
-                var postData = {
-                    at: new Date(),
-                    type: 'cartCreated',
-                    event: {
-                        cartToken: cartToken,
-                    },
-                    id: String(refb),
-                    shopifyShopDomain: 'arctic-fox-india.myshopify.com',
-                    lineItems,
-                    ref: refb,
-                    ssid: getcookieGlobalAnal('ssid'),
-                    contactId: Number.parseInt(getcookieGlobalAnal('contactIdBitespeed')),
-                };
-
-                let isMultiChannel = true;
-                // TODO
-                // if (getcookieGlobalAnal('isMultiChannel') == 'false' || getcookieGlobalAnal('isMultiChannel') == false) {
-                //   console.log('isMultichannel found and is false');
-                //   isMultiChannel = false;
-                // } else if (getcookieGlobalAnal('isMultiChannel') == 'true' || getcookieGlobalAnal('isMultiChannel') == true) {
-                //   isMultiChannel = true;
-                // }
-                // console.log('sendToWebhook', isMultiChannel);
-                // console.log('sendToWebhook-ignore', localStorage.getItem('isMultiChannel'));
-
-                let url = `${DBURL}/api/shopifyCustomer/create`;
-                if (isMultiChannel) {
-                    url = `https://d7ctrnffn8.execute-api.us-east-1.amazonaws.com/prod/browserSession`;
-                }
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: axiosConfig.headers,
-                    body: JSON.stringify(postData),
-                }).catch((err) => {
-                    console.log('AXIOS ERROR: ', err);
-                });
-            }
-
-
-        let intervalId = setInterval(() => {
-            lookForCart();
-        }, 1000);
-    </script>
-
-    <script name="bitespeed-tracking-tag">
-        let axiosConfig = {
-            headers: {
-                "Access-Control-Allow-Origin": "*"
-            }
-        };
-
-        function analyticsPost(postData) {
-            // TODO_sobhan
-            let isMultiChannel = true;
-            // if (getcookieGlobalAnal("isMultiChannel") == "false" || getcookieGlobalAnal("isMultiChannel") == false) {
-            //     console.log("isMultichannel found and is false");
-            //     isMultiChannel = false;
-            // } else if (getcookieGlobalAnal("isMultiChannel") == "true" || getcookieGlobalAnal("isMultiChannel") == true) {
-            //     isMultiChannel = true;
-            // }
-
-            // if (!isMultiChannel) return; // disable browser sessions in legacy
-
-            let analyticsUrl = isMultiChannel ?
-                "https://d7ctrnffn8.execute-api.us-east-1.amazonaws.com/prod/browserSession" :
-                `https://app.bitespeed.co/database/webhook/browserSession`;
-            console.log("analyticsUrl", analyticsUrl);
-            postData.shopifyShopDomain = "arctic-fox-india.myshopify.com";
-            postData.ref = getcookieGlobalAnal("refb");
-            postData.ssid = getcookieGlobalAnal("ssid");
-            postData.contactId = Number.parseInt(getcookieGlobalAnal("contactIdBitespeed"));
-
-            const userAgent = navigator.userAgent;
-            postData.platformMobile = /iPad|iPhone|iPod/.test(userAgent) ? "ios" : /Android/.test(userAgent) ? "android" : "";
-            postData.platformDesktop = /Mac/.test(userAgent) ? "mac" : /Windows/.test(userAgent) ? "windows" : "";
-
-            // don't send browser events on multichannel if contactId is not present
-            if (isMultiChannel && !postData.contactId) {
-                console.log("No contactId found for multichannel analytics file. Returning");
-                return;
-            }
-
-            fetch(analyticsUrl, {
-                method: "POST",
-                headers: axiosConfig.headers,
-                body: JSON.stringify(postData),
-            }).catch((err) => {
-                console.log("AXIOS ERROR: ", err);
-            });
-        }
-        (function() {
-            var bitespeedLayer = {
-                cartPollInterval: 2000
-            }
-            var config = {
-                linker: {
-                    domains: ['shopify.com', 'rechargeapps.com', 'recurringcheckout.com', 'carthook.com', 'checkout.com']
-                },
-                anonymize_ip: true,
-                allow_ad_personalization_signals: true,
-                page_title: removePii(document.title),
-                page_location: removePii(document.location.href)
-            }
-            var pageView = function() {
-
-            };
-
-            // delay page firing until the page is visible
-            if (document.hidden === true) {
-                var triggeredPageView = false;
-                document.addEventListener('visibilitychange', function() {
-                    if (!document.hidden && !triggeredPageView) {
-                        pageView();
-                        triggeredPageView = true;
-                    }
-                });
-            } else {
-                pageView()
-            }
-
-            var triggerPageViewEvent = function() {
-                if (Number.parseInt(getcookieGlobalAnal("contactIdBitespeed"))) {
-                    var postData = {
-                        "at": new Date(),
-                        "type": "pageViewed",
-                        "event": {
-                            url: window.location.href,
-                        },
-                        "contactId": Number.parseInt(getcookieGlobalAnal("contactIdBitespeed")),
-                        "source": 'shopify'
-                    }
-
-                    analyticsPost(postData);
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', function() {
-                triggerPageViewEvent()
-            });
-
-            var hasLocalStorage = (function() {
-                try {
-                    localStorage.setItem('bitespeed_test_storage', 'test');
-                    localStorage.removeItem('bitespeed_test_storage');
-                    return true;
-                } catch (ex) {
-                    return false;
-                }
-            })();
-            bitespeedLayer.ecommerce = {
-                'currencyCode': 'INR',
-                'impressions': []
-            };
-
-
-
-
-            bitespeedLayer.ecommerce.impressions = getUniqueProducts(bitespeedLayer.ecommerce.impressions);
-
-            function getUniqueProducts(array) {
-                var u = {},
-                    a = [];
-                for (var i = 0, l = array.length; i < l; ++i) {
-                    if (u.hasOwnProperty(array[i].id)) {
-                        continue;
-                    }
-                    a.push(array[i]);
-                    u[array[i].id] = 1;
-                }
-                return a;
-            };
-            var loadScript = function(url, callback) {
-                var script = document.createElement("script")
-                script.type = "text/javascript";
-                if (script.readyState) { /* IE */
-                    script.onreadystatechange = function() {
-                        if (script.readyState == "loaded" ||
-                            script.readyState == "complete") {
-                            script.onreadystatechange = null;
-                            callback();
-                        }
-                    };
-                } else { /* Others */
-                    script.onload = function() {
-                        callback();
-                    };
-                }
-                script.src = url;
-                document.getElementsByTagName("head")[0].appendChild(script);
-            }
-            var ldTracker = function(jQuery) {
-                jQuery(document).ready(function() {
-                    if (bitespeedLayer && bitespeedLayer.ecommerce) {
-                        /* run list, product, and clientID scripts everywhere */
-                        listViewScript();
-                        productPageScript();
-                    }
-                })
-                var ldTracker = function() {
-                    document.addEventListener('DOMContentLoaded', function() {
-                        if (typeof bitespeedLayer !== 'undefined' && bitespeedLayer.ecommerce) {
-                            // run list, product, and clientID scripts everywhere
-                            listViewScript();
-                            productPageScript();
-                        }
-                    });
-                }
-
-                function listViewScript() {
-                    if (!bitespeedLayer.ecommerce.impressions || !bitespeedLayer.ecommerce.impressions.length) return;
-                    window.setTimeout(function() {
-                        var postData = {
-                            "at": new Date(),
-                            "type": "productListViewed",
-                            "event": {
-                                list_id: bitespeedLayer.ecommerce.impressions[0].list,
-                                collection_id: bitespeedLayer.ecommerce.impressions[0].collection_id,
-                                products: bitespeedLayer.ecommerce.impressions
-                            }
-                        };
-                        analyticsPost(postData);
-                    }, 500) /* wait for pageview to fire first */
-                    /* product list clicks */
-                }
-                async function productPageScript() {
-                    var product = bitespeedLayer.ecommerce.detail &&
-                        bitespeedLayer.ecommerce.detail.products &&
-                        bitespeedLayer.ecommerce.detail.products[0]
-                    if (product) {
-                        if (hasLocalStorage) product.list_name = localStorage.list
-                        if (hasLocalStorage) product.list_id = localStorage.list
-                        var postData = {
-                            "at": new Date(),
-                            "type": "productViewed",
-                            "event": product
-                        }
-                        analyticsPost(postData);
-                    }
-                }
-            }
-            if (typeof jQuery === 'undefined') {
-                loadScript('https://code.jquery.com/jquery-3.7.1.min.js', function() {
-                    jQuery191 = jQuery.noConflict(true);
-                    ldTracker(jQuery191);
-                });
-            } else {
-                ldTracker(jQuery);
-            }
-            // ldTracker();
-            function removePii(string) {
-                var piiRegex = {
-                    "email": /[s&amp;/,=]([a-zA-Z0-9_.+-]+(@|%40)[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+)($|[s&amp;/,])/,
-                    "postcode": /[s&amp;/,=]([A-Z]{1,2}[0-9][0-9A-Z]?(s|%20)[0-9][A-Z]{2})($|[s&amp;/,])/,
-                };
-                var dlRemoved = string;
-                for (key in piiRegex) {
-                    dlRemoved = dlRemoved.replace(piiRegex[key], 'REMOVED');
-                }
-                return dlRemoved;
-            }
-        })()
-    </script>
-
-    <script type="text/javascript" name="NAMESPACED-NOTIFY_ME">
-        var popup_id = "";
-        var product = null || {};
-        var product_id = null || "";
-        var current_variant = null || "";
-        var is_current_variant_available = true;
-        var buyNowElement = null;
-        var mainNewButton = null;
-        var notify_me_text = "Notify Me";
-        var shop_domain = "";
-        var dont_show_notify_me_strict = false;
-
-        var variants = product.variants
-
-        // variables to build custom logic for different brands
-        var globalFormEle = null;
-        var globalPrimaryBtn = null;
-
-        var getParameterByNameTemp = (str, url = window.location.href) => {
-            str = str.replace(/[\[\]]/g, "\\$&");
-            let regex = new RegExp("[?&]" + str + "(=([^&#]*)|&|#|$)").exec(url);
-            return regex ? (regex[2] ? decodeURIComponent(regex[2].replace(/\+/g, " ")) : "") : null;
-        }
-
-        var variantParam = getParameterByNameTemp("variant");
-        if (variantParam && !isNaN(variantParam)) {
-            // getting variant param from the url and if it is a proper number set the current_variant as that
-            current_variant = Number(variantParam);
-        } else if (!current_variant && Array.isArray(variants) && variants.length > 0) {
-            // else set the first variant as the current variant
-            current_variant = variants[0].id;
-        }
-
-        // console.log(product, product_id, current_variant, variants, "DATA IS HEREEE");
-
-        // var popup_id = "";
-        // var product = {};
-        // var product_id = "";
-        // var current_variant = "";
-        // var is_current_variant_available = false;
-        // var buyNowElement = null;
-        // var mainNewButton = null;
-
-        // const variants = [];
-
-        var CREATED_NOTIFY_ME_BUTTON_CLASS = "bitespeed-notify-me-button";
-        var CREATED_NOTIFY_ME_BUTTON_CLASS_SELECTOR = `.${CREATED_NOTIFY_ME_BUTTON_CLASS}`;
-        var CREATED_NOTIFY_ME_BUTTON_PARENT_CLASS = "bitespeed-notify-me-button-parent";
-        var CREATED_NOTIFY_ME_BUTTON_PARENT_CLASS_SELECTOR = `.${CREATED_NOTIFY_ME_BUTTON_PARENT_CLASS}`;
-
-        var notifyMeTexts = ["notify me", "notify"];
-        var soldOutTexts = ["sold out", "out of stock"];
-
-        var wordsToRemove = ["sold out", "out of stock"].concat(notifyMeTexts);
-        var buyButtonTexts = ["buy now", "buy it", "buy it now", "sold out"];
     </script>
     <!-- END app snippet -->
 
@@ -2196,21 +1301,7 @@
                 })();
         }
 
-        function passedBrandInitLogic() {
-            const shopUrl = window.Shopify.shop;
-
-            switch (shopUrl) {
-                case "headphone-zone.myshopify.com":
-                    if ((BspdCurrentProduct ? .tags || []).some(tag => tag.toLowerCase() === "hidenotify"))
-                        return false;
-                    break;
-                default:
-                    return true;
-                    break;
-            }
-
-            return true;
-        }
+     
 
         function initNotifyFrontendService(popupid, notifyMeText, shopDomain = "") {
             if (!passedBrandInitLogic()) {
@@ -9133,7 +8224,7 @@
         </div>
         <div id="shopify-section-template--15381734293579__170382390313539fa2" class="shopify-section">
 
-            <section id="m-app-section-template--15381734293579__170382390313539fa2" class="m-section m-app-section " style="background-color: ;--section-padding-top: 50px; --section-padding-bottom: 50px;">
+            <section id="m-app-section-template--15381734293579__170382390313539fa2" class="m-section m-app-section " style="--section-padding-top: 50px; --section-padding-bottom: 50px;">
                 <div class="container-fluid m-section-my">
 
 
@@ -9464,7 +8555,7 @@
 
                                             <a target="_blank" class="social-media-links--item" href="https://www.instagram.com/arcticfoxindia/?hl=en" rel="noreferrer" aria-label="Instagram">
       <svg class="m-svg-icon--medium" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
+        <path fill="currentColor" d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
       </svg>
       
     </a>
@@ -9489,15 +8580,6 @@
     </a>
 
 
-
-
-
-                                            <a target="_blank" class="social-media-links--item" href="https://api.whatsapp.com/message/GQJG5GS5AM3UE1?autoload=1&app_absent=0" rel="noreferrer" aria-label="https://api.whatsapp.com/message/GQJG5GS5AM3UE1?autoload=1&app_absent=0">
-      <svg class="m-svg-icon--medium" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
-      </svg>
-      
-    </a>
 
 
 
@@ -9533,22 +8615,23 @@
 
 
 
-                        <div class="m-footer--bottom-center m:flex-1 m:text-left xl:m:text-center xl:m:w-auto m:w-full">
-                            <span class="m-footer__copyright">© Arctic Fox 2018 - 25</span></div>
-
-
-                        <div class="m-footer--bottom-right m:flex-1 m:flex m:flex-wrap m:items-left m:justify-left xl:m:w-auto m:w-full xl:m:justify-end m:flex-col md:m:flex-row">
-
-
-
+                        <div class="m-footer--bottom-center m:flex-1 m:text-left xl:m:text-center xl:m:w-auto m:w-full" style="flex: 1 1 100%; text-align: center; margin: 15px 0;">
+                            <div style="color: #333; font-size: 14px; line-height: 1.5; padding: 10px 0; border-top: 1px solid #e1e1e1; margin-top: 10px; width: 100%;">
+                                &copy; 2025 Nagurum X Arctic Fox. All rights reserved.
+                            </div>
+                            <div class="m-footer__copyright" style="margin-top: 5px; color: #666; font-size: 13px;">
+                                2018 - 2025
+                            </div>
                         </div>
 
+                        <div class="m-footer--bottom-right m:flex-1 m:flex m:flex-wrap m:items-left m:justify-left xl:m:w-auto m:w-full xl:m:justify-end m:flex-col md:m:flex-row">
+                            <!-- Additional footer content can go here -->
+                        </div>
 
                     </div>
                 </div>
             </div>
-
-        </m-footer>
+    </m-footer>
         <script src="//arcticfox.com/cdn/shop/t/34/assets/footer.js?v=153507452613171334261721631158" defer="defer"></script>
 
     </div>
@@ -9712,12 +8795,7 @@
 
                     <foxkit-cart-goal></foxkit-cart-goal>
                 </div>
-                <m-cart-drawer-items data-minimog-cart-items class="m-cart-drawer__body m-scrollbar--vertical m:flex m:flex-col m:flex-1">
-                    <form action="/cart" method="post" id="cart-drawer-form" class="m:w-full" novalidate>
-                        <div class="m-cart-drawer__empty">
-                            Your cart is currently empty.
-                        </div>
-                    </form>
+               
                 </m-cart-drawer-items>
                 <div class="m-cart-drawer__footer" id="MinimogCartDrawerFooter">
 
@@ -9819,6 +8897,20 @@
         .m-button--link {
             --btn-link-border: 1px;
         }
+        
+        .m-footer--middle {
+            padding-bottom: 0;
+        }
+        
+        /* Remove extra space at bottom of footer on mobile */
+        @media (max-width: 767px) {
+            .m-footer {
+                padding-bottom: 0;
+            }
+            .m-footer--bottom {
+                padding-bottom: 20px;
+            }
+        }
     </style>
     <div id="shopify-block-AYU1uNGdwRjVma1l1U__16017602894386113438" class="shopify-block shopify-app-block">
         <!-- BEGIN app snippet: junip-store-key --><span class="junip-store-key" data-supports-theme-extensions="true" data-shopify-preview-mode="true" data-store-key="K2hs3hwyc2nR7PxgMPsfhRiV" data-onsite-enabled="true" data-review-count-enabled="true" data-star-color="#FDB600" data-star-template-url="https://api.juniphq.com/images/star_options/1/template">
@@ -9914,8 +9006,8 @@
                 color: #0C0C0C !important;
             }
 
-            .th_pb_qty_bundle_cls .th_pb_qty_layout_grid .th_pb_qty_grid_titprice .th_pb_qty_grid_sale_price,
-            .th_pb_qty_bundle_cls .th_pb_qty_layout_grid .th_pb_qty_grid_titprice .th_pb_qty_grid_old_price {
+            .th_pb_qty_bundle_cls .th_pb_qty_layout_grid .th_pb_qty_grid_titprice .th_pb_qty_grid_old_price,
+            .th_pb_qty_bundle_cls .th_pb_qty_layout_grid .th_pb_qty_grid_titprice .th_pb_qty_grid_sale_price {
                 font-size: 14px !important;
                 color: #0C0C0C !important;
             }
