@@ -2440,9 +2440,7 @@
 
 
 
-        FoxKitPlugins.Countdown = Object.values({}).filter(entry => entry.active).map(entry => ({ ...(entry || {}),
-            locales: !FoxKitSettings.primaryLocale && entry ? .locales ? .[Shopify.locale]
-        }))
+        
         FoxKitPlugins.PreOrder = Object.values({
             "66c5aa0cca0f827b45f5487c": {
                 "discount": {
@@ -2473,26 +2471,7 @@
                 "__v": 0,
                 "metafield_gid": "gid:\/\/shopify\/Metafield\/32583526285387"
             }
-        }).filter(entry => entry.active)
-        FoxKitPlugins.PrePurchase = Object.values({}).filter(entry => entry.active)
-        FoxKitPlugins.InCart = Object.values({}).filter(entry => entry.active)
-        FoxKitPlugins.QuantityDiscount = Object.values({}).filter(entry => entry.active).map(entry => ({ ...(entry || {}),
-            locales: !FoxKitSettings.primaryLocale && entry ? .locales ? .[Shopify.locale]
-        }))
-        FoxKitPlugins.Bundle = Object.values({}).filter(entry => entry.active).map(entry => ({ ...(entry || {}),
-            locales: !FoxKitSettings.primaryLocale && entry ? .locales ? .[Shopify.locale]
-        }));
-        FoxKitPlugins.Menus = Object.values({});
-        FoxKitPlugins.Menus = FoxKitPlugins.Menus ? .map((item) => {
-            if (typeof item === 'string') return JSON.parse(item);
-            return item;
-        });
-        FoxKitPlugins.MenuData = Object.values({});
-        FoxKitPlugins.MenuData = FoxKitPlugins.MenuData ? .map((item) => {
-            if (typeof item === 'string') return JSON.parse(item);
-            return item;
-        });
-
+        })
 
 
 
@@ -3722,11 +3701,207 @@
 
         <style data-shopify>
             :root {
-                --logo-width-desktop: 50px;
-                --logo-width-mobile: 30px;
-                --logo-width-sticky: 45px;
-                --logo-height-sticky: 47.852112676056336px;
+                --logo-width-desktop: 180px;
+                --logo-width-mobile: 100px;
+                --logo-width-sticky: 150px;
+                --logo-height-sticky: auto;
                 --header-transparent-text-color: 255, 255, 255;
+            }
+            /* Tablet and small desktop view (768px - 1024px) */
+            @media (min-width: 768px) and (max-width: 1024px) {
+                /* Mobile navbar container */
+                .m-header__mobile {
+                    min-height: 50px !important;
+                    height: 50px !important;
+                    padding: 0 15px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    position: relative;
+                }
+                
+                /* Logo container */
+                .m-logo--mobile {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    width: auto !important;
+                    max-width: 150px !important;
+                    height: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+                
+                /* Logo image container */
+                .m-logo__image-default {
+                    height: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    line-height: 0 !important;
+                }
+                
+                .m-logo__image {
+                    display: flex !important;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    max-width: 100%;
+                }
+                
+                .m-logo__image img {
+                    max-height: 60px !important;
+                    width: auto !important;
+                    max-width: 100% !important;
+                    height: auto !important;
+                    display: block !important;
+                    margin: 0 !important;
+                    position: relative;
+                    top: 0;
+                }
+                
+                /* Menu button */
+                .m-menu-button {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: flex-start !important;
+                    padding: 0 0 0 5px !important;
+                    margin: 0 !important;
+                    width: 40px;
+                    height: 100%;
+                    position: relative;
+                    z-index: 2;
+                }
+            }
+
+            /* Mobile view (up to 767px) */
+            @media (max-width: 767px) {
+                :root {
+                    --logo-width-desktop: 140px;
+                    --logo-width-mobile: 100px;
+                }
+                /* Mobile navbar container */
+                .m-header__mobile {
+                    min-height: 50px !important;
+                    height: 50px !important;
+                    padding: 0 15px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    position: relative;
+                }
+                
+                /* Logo container */
+                .m-logo--mobile {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    width: auto !important;
+                    max-width: 150px !important;
+                    height: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+                
+                /* Logo image container */
+                .m-logo__image-default {
+                    height: 100% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    line-height: 0 !important;
+                }
+                
+                .m-logo__image {
+                    display: flex !important;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    max-width: 100%;
+                }
+                
+                .m-logo__image img {
+                    max-height: 60px !important;
+                    width: auto !important;
+                    max-width: 100% !important;
+                    height: auto !important;
+                    display: block !important;
+                    margin: 0 !important;
+                    position: relative;
+                    top: 0;
+                }
+                
+                /* Menu button */
+                .m-menu-button {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: flex-start !important;
+                    padding: 0 0 0 5px !important;
+                    margin: 0 !important;
+                    width: 40px;
+                    height: 100%;
+                    position: relative;
+                    z-index: 2;
+                }
+                
+                /* Adjust hamburger icon position */
+                .m-hamburger-box {
+                    margin-top: 0 !important;
+                    padding-top: 0 !important;
+                    line-height: 1 !important;
+                }
+                
+                .m-hamburger-box__inner,
+                .m-hamburger-box__inner::before,
+                .m-hamburger-box__inner::after {
+                    margin-top: 0 !important;
+                }
+                
+                /* Adjust right side for balance */
+                .m-header__mobile-right {
+                    width: 40px;
+                    flex-shrink: 0;
+                }
+                
+                /* Right side of navbar */
+                .m-header__mobile-right {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: flex-end !important;
+                    height: 100%;
+                    padding-right: 15px !important;
+                }
+                .m-hamburger-box {
+                    width: 24px;
+                    height: 24px;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+                .m-hamburger-box__inner,
+                .m-hamburger-box__inner::before,
+                .m-hamburger-box__inner::after {
+                    background-color: currentColor;
+                    height: 2px;
+                    width: 20px;
+                    transition: all 0.2s ease-in-out;
+                }
+                .m-hamburger-box__inner::before {
+                    top: -6px;
+                    width: 24px;
+                }
+                .m-hamburger-box__inner::after {
+                    bottom: -6px;
+                    width: 16px;
+                }
             }
         </style>
         <m-header data-section-id="sections--15381734752331__header" data-section-type="header" data-page="/" data-header-design="logo-center-menu-left" class="m-header m:block" data-transparent="false" data-sticky="on_scroll_up">
@@ -3750,8 +3925,7 @@
 
                             <div class="m-logo__image-default m:display-flex m-image" style="--aspect-ratio: 0.9403973509933775;--aspect-ratio-mobile: 0.9403973509933775">
 
-                                <img src="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092" alt="Arctic Fox India" srcset="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=50 50w, //arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=100 100w" height="32"
-                                    class="m:inline-block">
+                                <img src="Untitled_design__5_-removebg-preview.png" alt="Nagurum X Arctic Fox" width="120" height="auto" class="m:inline-block" style="max-width: 100%; height: auto;">
                             </div>
 
 
@@ -4408,8 +4582,7 @@
 
                                         <div class="m-logo__image-default m-image">
 
-                                            <img src="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092" alt="Arctic Fox India" srcset="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=50 50w, //arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=100 100w" width="142"
-                                                height="151" class="m:inline-block">
+                                            <img src="Untitled_design__5_-removebg-preview.png" alt="Nagurum X Arctic Fox" width="142" height="auto" class="m:inline-block" style="max-width: 100%; height: auto;">
 
                                         </div>
 
@@ -4484,7 +4657,7 @@
 
                                             <div class="m-logo__image-default m-image">
 
-                                                <img src="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092" alt="Arctic Fox India" srcset="//arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=50 50w, //arcticfox.com/cdn/shop/files/logob.png?v=1613716092&amp;width=100 100w" width="142"
+                                                <img src="Untitled_design__5_-removebg-preview.png" alt="Nagurum X Arctic Fox" width="142"
                                                     height="151" class="m:inline-block">
 
                                             </div>
@@ -7760,6 +7933,14 @@
 
             <style>
                 #m-section--template--15381734293579__92a3ad8e-2435-49d2-8e98-04b3a4bb65cd {
+                    --m-section-header-spacing-bottom: 10px;
+                    margin-bottom: 0px !important;
+                    --section-padding-bottom: 0px !important;
+                }
+                #m-section--template--15381734293579__92a3ad8e-2435-49d2-8e98-04b3a4bb65cd .m-section-my {
+                    margin-bottom: 0 !important;
+                }
+                #m-section--template--15381734293579__92a3ad8e-2435-49d2-8e98-04b3a4bb65cd {
                     --column-gap: 30px;
                     --column-gap-mobile: 16px;
                     --row-gap: 40px;
@@ -9849,6 +10030,11 @@
     </m-cart-drawer>
 
     <style>
+        /* Remove top padding from footer */
+        .m-footer--middle {
+            padding-top: 0 !important;
+        }
+        
         .m-section__subheading,
         .m-richtext__subtitle {
             font-weight: 500;
